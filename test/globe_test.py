@@ -86,6 +86,8 @@ class GlobeTest(unittest.TestCase):
         globe = Globe()
 
         neighbors = globe.get_neighbors(0, 0)
+        neighbors = globe.get_neighbors(0, 0)
+        neighbors = globe.get_neighbors(0, 0)
         expected_neighbors = [
             (4, 4), (4, 0), (4, 1),
             (0, 4), (0, 0), (0, 1),

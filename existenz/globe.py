@@ -1,4 +1,5 @@
 from location import Location
+from decorator import memoize
 
 
 class Globe(object):
@@ -35,6 +36,7 @@ class Globe(object):
             raise IndexError('No coordinate (%s, %s)' % (x, y))
         return self._locations[index]
 
+    @memoize
     def get_neighbors(self, x, y):
         """
 
@@ -43,9 +45,7 @@ class Globe(object):
         :return:
         :rtype: list
         """
-        n = list(self.locations[index] for index in self._neighbors(x,y))
-
-        return n
+        return list(self.locations[index] for index in self._neighbors(x, y))
 
     def _neighbors(self, x, y):
         indexes = list()
