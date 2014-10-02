@@ -15,6 +15,7 @@ class Location(object):
     def y(self):
         return self._y
 
+    @property
     def coordinate(self):
         return self.x, self.y
 
