@@ -1,8 +1,11 @@
+"""A globe is used to represent a given state of the world."""
 from location import Location
-from decorator import memoize
+from util_decorator import memoize
 
 
 class Globe(object):
+    """A Globe is used to represent a given state of the world."""
+
     def __init__(self, size=5):
         self._size = size
         self._total_locations = size * size
@@ -15,19 +18,23 @@ class Globe(object):
 
     @property
     def locations(self):
+        """A list of the locations in a given globe."""
         return self._locations
 
     @property
     def size(self):
+        """The size of a side of the globe."""
         return self._size
 
     def get_location(self, x, y):
-        """
+        """Retrieve a given location from given coordinates.
 
-        :param x:
-        :param y:
-        :return:
-        :rtype: Location
+        :param x: The abscissa of the coordinate.
+        :type x: int
+        :param y: The ordinate of the coordinate.
+        :type y: int
+        :return: The location for the given coordinates.
+        :rtype: existenz.location.Location
         """
         index = (x * self._size) + y
         x_out_of_bound = x < 0 or x >= self._size
@@ -38,12 +45,14 @@ class Globe(object):
 
     @memoize
     def get_neighbors(self, x, y):
-        """
+        """Retrieve the locations adjacent to the given coordinates.
 
-        :param x:
-        :param y:
-        :return:
-        :rtype: list
+        :param x: The abscissa of the coordinates.
+        :type x: int
+        :param y: The ordinate of the coordinates.
+        :type y: int
+        :return: A list of neighbors locations.
+        :rtype: list(existenz.location.Location)
         """
         return list(self.locations[index] for index in self._neighbors(x, y))
 

@@ -1,18 +1,30 @@
 #!/usr/bin/env python
+"""The initial execution runner of **Existenz**.
+
+"""
 import argparse
-import sys
 
 from world import World
 
 
 class App(object):
+    """The core application class."""
+
     def __init__(self, rotate=3, size=10):
+        """
+
+        :param rotate:
+        :type rotate: int
+        :param size:
+        :type size: int
+        """
         self.rotate = rotate
 
         # create the world
         self.world = World(size)
 
     def run(self):
+        """Executes the configured world scenario."""
         self.world.rotate(self.rotate)
 
 
