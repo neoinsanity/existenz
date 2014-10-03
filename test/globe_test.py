@@ -90,7 +90,7 @@ class GlobeTest(unittest.TestCase):
         neighbors = globe.get_neighbors(0, 0)
         expected_neighbors = [
             (4, 4), (4, 0), (4, 1),
-            (0, 4), (0, 0), (0, 1),
+            (0, 4), (0, 1),
             (1, 4), (1, 0), (1, 1)]
         neighbors_coordinates = [(l.x, l.y) for l in neighbors]
         self.assertListEqual(expected_neighbors, neighbors_coordinates)
@@ -98,7 +98,7 @@ class GlobeTest(unittest.TestCase):
         neighbors = globe.get_neighbors(4, 4)
         expected_neighbors = [
             (3, 3), (3, 4), (3, 0),
-            (4, 3), (4, 4), (4, 0),
+            (4, 3), (4, 0),
             (0, 3), (0, 4), (0, 0)]
         neighbors_coordinates = [(l.x, l.y) for l in neighbors]
         self.assertListEqual(expected_neighbors, neighbors_coordinates)
@@ -106,7 +106,7 @@ class GlobeTest(unittest.TestCase):
         neighbors = globe.get_neighbors(2, 3)
         expected_neighbors = [
             (1, 2), (1, 3), (1, 4),
-            (2, 2), (2, 3), (2, 4),
+            (2, 2), (2, 4),
             (3, 2), (3, 3), (3, 4)]
         neighbors_coordinates = [(l.x, l.y) for l in neighbors]
         self.assertListEqual(expected_neighbors, neighbors_coordinates)

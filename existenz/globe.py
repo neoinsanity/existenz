@@ -51,6 +51,9 @@ class Globe(object):
         indexes = list()
         for a in [-1, 0, 1]:
             for b in [-1, 0, 1]:
+                if a == 0 and b == 0:
+                    # Skip the central location.
+                    continue
                 x_ordinate = (x + a) % self.size
                 y_ordiante = (y + b) % self.size
                 index = (self.size * x_ordinate) + y_ordiante

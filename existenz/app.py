@@ -20,9 +20,11 @@ if __name__ == '__main__':
     # Get the args.
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--rotate',
+                        type=int,
                         default=3,
                         help='Number of days to run.')
     parser.add_argument('-s', '--size',
+                        type=int,
                         default=10,
                         help='Size of world.')
     args = parser.parse_args()
