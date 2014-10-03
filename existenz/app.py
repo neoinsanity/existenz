@@ -1,29 +1,32 @@
 #!/usr/bin/env python
-
+import argparse
 import sys
 
 from world import World
 
 
 class App(object):
+    def __init__(self, rotate=3, size=10):
+        self.rotate = rotate
 
-    def __init__(self, size = 10):
         # create the world
         self.world = World(size)
 
-    @property
-    def current_state(self):
-        return self.world.globe
-
-    def step(self, days = 1):
-        self.world.rotate(days)
+    def run(self):
+        self.world.rotate(self.rotate)
 
 
 if __name__ == '__main__':
-    argv = sys.argv
-    app = App(argv=argv)
+    # Get the args.
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-r', '--rotate',
+                        default=3,
+                        help='Number of days to run.')
+    parser.add_argument('-s', '--size',
+                        default=10,
+                        help='Size of world.')
+    args = parser.parse_args()
 
-    app.step()
-
-    # print the results out
-    print app.current_state
+    # run the app
+    app = App(rotate=args.rotate, size=args.size)
+    app.run()

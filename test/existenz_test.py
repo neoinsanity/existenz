@@ -15,5 +15,4 @@ class ExistenzCase(unittest.TestCase):
         app = App()
         self.assertIsNotNone(app)
 
-        app.step()
-        print str(app.current_state)
+        app.run()
