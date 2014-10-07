@@ -2,7 +2,7 @@
 Existenz 0.0.1 - an existing individual
 ========================================
 
-**Existenz** in version of Conways's Game of Life.
+**Existenz** in version of Conway's Game of Life.
 
 In it's current form, this is nothing more than a toy commandline application.
 
