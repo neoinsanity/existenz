@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>World &mdash; Existenz 0.0.1 Documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="Existenz 0.0.1 Documentation" href="index.html" />
+    <link rel="prev" title="Utility Decorator" href="existenz.util_decorator.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="existenz.util_decorator.html" title="Utility Decorator"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Existenz 0.0.1 Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-existenz.world">
+<span id="world"></span><h1>World<a class="headerlink" href="#module-existenz.world" title="Permalink to this headline">¶</a></h1>
+<p>A representation of the World.</p>
+<dl class="class">
+<dt id="existenz.world.World">
+<em class="property">class </em><tt class="descclassname">existenz.world.</tt><tt class="descname">World</tt><big>(</big><em>size=10</em><big>)</big><a class="headerlink" href="#existenz.world.World" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the world for denizens to live and die.</p>
+<dl class="method">
+<dt id="existenz.world.World.dump_world">
+<tt class="descname">dump_world</tt><big>(</big><big>)</big><a class="headerlink" href="#existenz.world.World.dump_world" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that will dump the state of the current world to stdio.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="existenz.world.World.future_world">
+<tt class="descname">future_world</tt><a class="headerlink" href="#existenz.world.World.future_world" title="Permalink to this definition">¶</a></dt>
+<dd><p>A representation of the future world being constructed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="existenz.world.World.globe">
+<tt class="descname">globe</tt><a class="headerlink" href="#existenz.world.World.globe" title="Permalink to this definition">¶</a></dt>
+<dd><p>A representation of the current state of the world.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="existenz.world.World.grow">
+<tt class="descname">grow</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#existenz.world.World.grow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to determine if a plant should grow in a given location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>location</strong> (<a class="reference internal" href="existenz.location.html#existenz.location.Location" title="existenz.location.Location"><em>existenz.location.Location</em></a>) &#8211; A candidate location for plant life.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A 1 is returned if the location should have a plant, else a
+0 is returned if no plant should exist on the given location.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="existenz.world.World.process_plants">
+<tt class="descname">process_plants</tt><big>(</big><big>)</big><a class="headerlink" href="#existenz.world.World.process_plants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that will life-cycle plants in the world.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="existenz.world.World.rotate">
+<tt class="descname">rotate</tt><big>(</big><em>days=1</em><big>)</big><a class="headerlink" href="#existenz.world.World.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cycle through a given number of days in the world.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>days</strong> (<em>int</em>) &#8211; The number of days the world should life-cycle it denizens.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="existenz.world.World.size">
+<tt class="descname">size</tt><a class="headerlink" href="#existenz.world.World.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the world length.</p>
+<p>The total number of locations is equivalent to size * size.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="existenz.util_decorator.html"
+                        title="previous chapter">Utility Decorator</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/existenz.world.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="existenz.util_decorator.html" title="Utility Decorator"
+             >previous</a> |</li>
+        <li><a href="index.html">Existenz 0.0.1 Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Raul Gonzalez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>
