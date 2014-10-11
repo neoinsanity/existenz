@@ -2,17 +2,20 @@
 from decorator import decorator
 
 
-@decorator
 def memoize(f):
+    f.cache = {}
+    return decorator(_memoize, f)
+
+
+def _memoize(func, *args, **kwargs):
     """A args based function cache."""
-    memo = {}
-
-    def wrapper(*args):
-        if args in memo:
-            return memo[args]
-        else:
-            rv = f(*args)
-            memo[args] = rv
-            return rv
-
-    return wrapper
+    if kwargs:
+        key = args, frozenset(kwargs.iteritems())
+    else:
+        key = args
+    cache = func.cache
+    if key in cache:
+        return cache[key]
+    else:
+        cache[key] = result = func(*args, **kwargs)
+        return result
