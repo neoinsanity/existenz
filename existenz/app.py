@@ -2,15 +2,17 @@
 """The initial execution runner of **Existenz**.
 
 """
-import argparse
+import sys
+
+from cognate.component_core import ComponentCore
 
 from world import World
 
 
-class App(object):
+class App(ComponentCore):
     """The core application class."""
 
-    def __init__(self, rotate=3, size=10):
+    def __init__(self, rotate=3, size=10, **kwargs):
         """
 
         :param rotate:
@@ -19,9 +21,23 @@ class App(object):
         :type size: int
         """
         self.rotate = rotate
+        self.size = size
 
+        ComponentCore.__init__(self, **kwargs)
+
+    def cognate_options(self, arg_parser):
+        arg_parser.add_argument('-r', '--rotate',
+                                type=int,
+                                default=self.rotate,
+                                help='Number of days to run.')
+        arg_parser.add_argument('-s', '--size',
+                                type=int,
+                                default=self.size,
+                                help='Size of world.')
+
+    def cognate_configure(self, args):
         # create the world
-        self.world = World(size)
+        self.world = World(self.size)
 
     def run(self):
         """Executes the configured world scenario."""
@@ -29,18 +45,5 @@ class App(object):
 
 
 if __name__ == '__main__':
-    # Get the args.
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-r', '--rotate',
-                        type=int,
-                        default=3,
-                        help='Number of days to run.')
-    parser.add_argument('-s', '--size',
-                        type=int,
-                        default=10,
-                        help='Size of world.')
-    args = parser.parse_args()
-
-    # run the app
-    app = App(rotate=args.rotate, size=args.size)
+    app = App(argv=sys.argv)
     app.run()
