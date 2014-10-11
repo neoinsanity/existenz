@@ -5,25 +5,25 @@ import json
 class Location(object):
     """A representation of a given point on a globe."""
 
-    def __init__(self, x, y):
-        self._x = x
-        self._y = y
+    def __init__(self, x_coord, y_coord):
+        self._x_coord = x_coord
+        self._y_coord = y_coord
         self._plant = 0
 
     @property
-    def x(self):
+    def x(self):  # pylint: disable=invalid-name
         """The abscissa of the locations coordinate.
 
         :rtype: int
         """
-        return self._x
+        return self._x_coord
 
     @property
-    def y(self):
+    def y(self):  # pylint: disable=invalid-name
         """The ordinate of the location coordinate
 
         :rtype: int"""
-        return self._y
+        return self._y_coord
 
     @property
     def coordinate(self):
