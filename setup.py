@@ -6,7 +6,7 @@ with open('README.txt') as file:
 
 setup(
     name='existenz',
-    version='0.0.1',
+    version='0.0.2a',
     author='Raul Gonzalez',
     author_email='mindbender@gmail.com',
     url='https://github.com/neoinsanity/existenz',
