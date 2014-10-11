@@ -2,9 +2,16 @@
 from decorator import decorator
 
 
-def memoize(f):
-    f.cache = {}
-    return decorator(_memoize, f)
+def memoize(func):
+    """Decorator to add cache to function calls.
+
+    :param func: The function to be decorated with a cache.
+    :type func: types.MethodType
+    :return: The decorated function.
+    :rtype: types.MethodType
+    """
+    func.cache = {}
+    return decorator(_memoize, func)
 
 
 def _memoize(func, *args, **kwargs):

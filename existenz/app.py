@@ -6,7 +6,7 @@ import sys
 
 from cognate.component_core import ComponentCore
 
-from world import World
+from existenz.world import World
 
 
 class App(ComponentCore):
@@ -22,6 +22,8 @@ class App(ComponentCore):
         """
         self.rotate = rotate
         self.size = size
+
+        self.world = None
 
         ComponentCore.__init__(self, **kwargs)
 
@@ -45,5 +47,5 @@ class App(ComponentCore):
 
 
 if __name__ == '__main__':
-    app = App(argv=sys.argv)
+    app = App(argv=sys.argv)  # pylint: disable=invalid-name
     app.run()
