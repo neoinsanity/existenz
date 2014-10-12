@@ -1,5 +1,5 @@
 ========================================
-Existenz 0.0.2 - an existing individual
+Existenz 0.0.3 - an existing individual
 ========================================
 
 **Existenz** in version of Conway's Game of Life.
