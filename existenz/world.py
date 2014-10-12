@@ -2,7 +2,7 @@
 import random
 from sys import stdout
 
-from globe import Globe
+from existenz.globe import Globe
 
 
 class World(object):
@@ -76,8 +76,8 @@ class World(object):
         """
         neighbors = self.globe.get_neighbors(location.x, location.y)
         life_count = 0
-        for n in neighbors:
-            life_count = life_count + 1 if n.plant else life_count
+        for neighbor in neighbors:
+            life_count = life_count + 1 if neighbor.plant else life_count
 
         if location.plant:
             if life_count < 2 or life_count > 4:
@@ -93,9 +93,9 @@ class World(object):
     def dump_world(self):
         """Method that will dump the state of the current world to stdio."""
         stdout.write('-- day: ' + str(self._day) + '\n')
-        for x in range(0, self.size):
-            for y in range(0, self.size):
-                index = (self.size * x) + y
+        for x_coord in range(0, self.size):
+            for y_coord in range(0, self.size):
+                index = (self.size * x_coord) + y_coord
                 loc = self._current_globe.locations[index]
                 stdout.write(str(loc))
             stdout.write('\n')

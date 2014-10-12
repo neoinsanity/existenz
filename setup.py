@@ -6,7 +6,7 @@ with open('README.txt') as file:
 
 setup(
     name='existenz',
-    version='0.0.1',
+    version='0.0.2',
     author='Raul Gonzalez',
     author_email='mindbender@gmail.com',
     url='https://github.com/neoinsanity/existenz',
@@ -15,7 +15,8 @@ setup(
     long_description=long_description,
     packages=['existenz', ],
     install_requires=[
-        'decorator==3.4.0'
+        'cognate==0.0.1',
+        'decorator==3.4.0',
     ],
     include_package_data=True,
 )

@@ -2,4 +2,4 @@
 Existenz - an existing individual
 ==================================
 
-Existenz in version of Conways's Game of Life.
+Existenz in version of Conway's Game of Life.
