@@ -19,4 +19,14 @@ setup(
         'decorator==3.4.0',
     ],
     include_package_data=True,
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Topic :: Scientific/Engineering :: Artificial Life',
+        'Topic :: Software Development',
+    ]
 )
