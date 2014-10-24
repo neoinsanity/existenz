@@ -17,6 +17,7 @@ setup(
     install_requires=[
         'cognate==0.0.1',
         'decorator==3.4.0',
+        'ontic==0.0.4',
     ],
     include_package_data=True,
 )
