@@ -1,21 +1,30 @@
 from copy import deepcopy
 import sys
 
-from ontic.ontic_type import OnticType
-from ontic.schema_type import SchemaType
+from ontic.ontic_type import OnticType, perfect_object
+from ontic.schema_type import PropertySchema, SchemaType
 
 
 class BaseGene(OnticType):
     ONTIC_SCHEMA = SchemaType(
-        mut_prob={
-            'type': float,
-            'default': 0.01,
-        },
-        value={}
-    )
+        mut_prob=PropertySchema(
+            type=float,
+            default=0.01),
+        value=PropertySchema())
 
     def __init__(self, *args, **kwargs):
         OnticType.__init__(self, *args, **kwargs)
+        perfect_object(self)
+
+    def mutate(self):
+        """Causes the gene to mutate."""
+        raise NotImplementedError('Must be implemented by subclasses.')
+
+    def random_value(self):
+        """Generate a plausible random value for a given gene type."""
+        raise NotImplementedError('Must be implemented by subclasses.')
+
+
 
 
 class CharGene(BaseGene):
@@ -25,31 +34,27 @@ class CharGene(BaseGene):
 
     ONTIC_SCHEMA = deepcopy(BaseGene.ONTIC_SCHEMA)
     ONTIC_SCHEMA.update(SchemaType(
-        mut_amt={
-            'type': int,
-            'required': True,
-            'default': MUTATION_AMOUNT,
-        },
-        rand_max={
-            'type': str,
-            'required': True,
-            'default': RAND_MAX_DEFAULT,
-            'min': 1,
-            'max': 1,
-        },
-        rand_min={
-            'type': str,
-            'required': True,
-            'default': RAND_MIN_DEFAULT,
-            'min': 1,
-            'max': 1,
-        },
-        value={
-            'type': basestring,
-            'default': None,
-            'min': 1,
-            'max': 1,
-        }
+        mut_amt=PropertySchema(
+            type=int,
+            required=True,
+            default=MUTATION_AMOUNT),
+        rand_max=PropertySchema(
+            type=str,
+            required=True,
+            default=RAND_MAX_DEFAULT,
+            min=1,
+            max=1),
+        rand_min=PropertySchema(
+            type=str,
+            required=True,
+            default=RAND_MIN_DEFAULT,
+            min=1,
+            max=1),
+        value=PropertySchema(
+            type=basestring,
+            default=None,
+            min=1,
+            max=1)
     ))
 
 
@@ -60,25 +65,19 @@ class IntGene(BaseGene):
 
     ONTIC_SCHEMA = deepcopy(BaseGene.ONTIC_SCHEMA)
     ONTIC_SCHEMA.update(SchemaType(
-        mut_amt={
-            'type': int,
-            'required': True,
-            'default': MUTATION_AMOUNT,
-        },
-        rand_max={
-            'type': int,
-            'required': True,
-            'default': RAND_MAX_DEFAULT,
-        },
-        rand_min={
-            'type': int,
-            'required': True,
-            'default': RAND_MIN_DEFAULT,
-        },
-        value={
-            'type': int,
-        }
+        mut_amt=PropertySchema(
+            type=int,
+            required=True,
+            default=MUTATION_AMOUNT),
+        rand_max=PropertySchema(
+            type=int,
+            required=True,
+            default=RAND_MAX_DEFAULT),
+        rand_min=PropertySchema(
+            type=int,
+            required=True,
+            default=RAND_MIN_DEFAULT
+        ),
+        value=PropertySchema(
+            type=int)
     ))
-
-    def __init__(self, *args, **kwargs):
-        BaseGene.__init__(self, *args, **kwargs)
