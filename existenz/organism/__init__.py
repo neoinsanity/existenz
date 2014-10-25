@@ -1,3 +1,3 @@
-from gene import IntGene
+from gene import CharGene, IntGene
 
-__all__ = ['IntGene']
+__all__ = ['CharGene', 'IntGene']
