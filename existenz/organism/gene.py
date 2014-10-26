@@ -56,6 +56,19 @@ class CharGene(BaseGene):
             max=1)
     ))
 
+    def mutate(self):
+        ord_value = ord(self.value) + randint(-self.mut_amt, self.mut_amt)
+        ord_max = ord(self.rand_max)
+        ord_min = ord(self.rand_min)
+        dist_to_zero = 0 - ord_min
+        adj_value = ord_value + dist_to_zero
+        range_cnt = ord_max - ord_min + 1
+        self.value = chr((adj_value % range_cnt) - dist_to_zero)
+
+
+    def random_value(self):
+        return chr(randint(ord(self.rand_min), ord(self.rand_max)))
+
 
 class IntGene(BaseGene):
     MUTATION_AMOUNT = 1
@@ -85,10 +98,9 @@ class IntGene(BaseGene):
         self._normalize_value()
 
     def random_value(self):
-        self.value = randint(self.rand_min, self.rand_max)
+        return randint(self.rand_min, self.rand_max)
 
     def _normalize_value(self):
-
         dist_to_zero = 0 - self.rand_min
         adj_value = self.value + dist_to_zero
         range_cnt = self.rand_max - self.rand_min + 1

@@ -30,6 +30,31 @@ class GeneTest(unittest.TestCase):
         self.assertEqual(None, char_gene.value)
         ontic_type.validate_object(char_gene)
 
+    def test_char_gene_random_value(self):
+        char_gene = CharGene(rand_min='a', rand_max='z')
+        expected_range = map(chr, range(97, 123))
+        init_val = char_gene.random_value()
+        caught_change = False
+        for _ in range(0, 5000):
+            ret = char_gene.random_value()
+            self.assertIsInstance(ret, str)
+            self.assertIn(ret, expected_range)
+            caught_change = init_val != ret or caught_change
+
+        self.assertTrue(caught_change,
+                        'No random change in value detected')
+
+    def test_char_gene_mutation(self):
+        char_gene = CharGene(rand_min='a', rand_max='z')
+        init_val = char_gene.value = str('r')
+        caught_change = False
+        for _ in range(0, 200):
+            char_gene.mutate()
+            caught_change = init_val != char_gene.value or caught_change
+
+        self.assertTrue(caught_change,
+                        'No mutation in value detected')
+
     def test_default_int_gene(self):
         int_gene = IntGene()
         self.assertIsNotNone(int_gene)
@@ -39,23 +64,30 @@ class GeneTest(unittest.TestCase):
         self.assertIsNone(int_gene.value)
         ontic_type.validate_object(int_gene)
 
-        # test random generation
-        int_gene.rand_min = 0
-        int_gene.rand_max = 1
-        for _ in range(0, 200):
-            int_gene.random_value()
-            self.assertIs(int_gene.value, int)
-            self.assertIn(int_gene.value, {0, 1})
+    def test_int_gene_random_value(self):
+        int_gene = IntGene(rand_min=0, rand_max=250)
+        expected_range = [x for x in range(0, 251)]
+        init_val = int_gene.random_value()
+        caught_change = False
+        for _ in range(0, 250):
+            ret = int_gene.random_value()
+            self.assertIsInstance(ret, int)
+            self.assertIn(ret, expected_range)
+            caught_change = init_val != ret or caught_change
 
-        # test mutation
-        int_gene.mutate()
-        int_gene.value = 0
-        int_gene.mutate()
-        self.assertEqual(1, int_gene.value)
+        self.assertTrue(caught_change,
+                        'No random change in value detected')
+
+    def test_int_gene_mutation(self):
+        int_gene = IntGene(rand_min=0, rand_max=250)
+        init_val = int_gene.value = 1
+        caught_change = False
         for _ in range(0, 200):
-            next_val = abs(int_gene.value - 1)
             int_gene.mutate()
-            self.assertEqual(next_val, int_gene.value)
+            caught_change = init_val != int_gene.value or caught_change
+
+        self.assertTrue(caught_change,
+                        'No mutation in value detected')
 
     def test_normalize(self):
         int_gene = IntGene(rand_min=0, rand_max=9, value=2)
@@ -63,10 +95,10 @@ class GeneTest(unittest.TestCase):
         self.assertEqual(2, int_gene.value)
         int_gene.value = 10
         int_gene._normalize_value()
-        self.assertEqual(0, int_gene.value )
+        self.assertEqual(0, int_gene.value)
         int_gene.value = 11
         int_gene._normalize_value()
-        self.assertEqual(1, int_gene.value )
+        self.assertEqual(1, int_gene.value)
         int_gene.value = 20
         int_gene._normalize_value()
         self.assertEqual(0, int_gene.value)
