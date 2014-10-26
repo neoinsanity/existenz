@@ -1,4 +1,5 @@
 from copy import deepcopy
+from random import randint
 import sys
 
 from ontic.ontic_type import OnticType, perfect_object
@@ -23,8 +24,6 @@ class BaseGene(OnticType):
     def random_value(self):
         """Generate a plausible random value for a given gene type."""
         raise NotImplementedError('Must be implemented by subclasses.')
-
-
 
 
 class CharGene(BaseGene):
@@ -81,3 +80,17 @@ class IntGene(BaseGene):
         value=PropertySchema(
             type=int)
     ))
+
+    def mutate(self):
+        new_value += randint(-self.mut_amt, self.mut_amt)
+        self._normalize_value()
+
+    def random_value(self):
+        self.value = randint(self.rand_min, self.rand_max)
+
+    def _normalize_value(self):
+
+        dist_to_zero = 0 - self.rand_min
+        adj_value = self.value + dist_to_zero
+        range_cnt = abs(self.rand_max - self.rand_min) + 1
+        self.value = (adj_value % range_cnt) - dist_to_zero
