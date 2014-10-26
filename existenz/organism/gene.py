@@ -75,14 +75,13 @@ class IntGene(BaseGene):
         rand_min=PropertySchema(
             type=int,
             required=True,
-            default=RAND_MIN_DEFAULT
-        ),
+            default=RAND_MIN_DEFAULT),
         value=PropertySchema(
             type=int)
     ))
 
     def mutate(self):
-        new_value += randint(-self.mut_amt, self.mut_amt)
+        self.value += randint(-self.mut_amt, self.mut_amt)
         self._normalize_value()
 
     def random_value(self):
@@ -92,5 +91,5 @@ class IntGene(BaseGene):
 
         dist_to_zero = 0 - self.rand_min
         adj_value = self.value + dist_to_zero
-        range_cnt = abs(self.rand_max - self.rand_min) + 1
+        range_cnt = self.rand_max - self.rand_min + 1
         self.value = (adj_value % range_cnt) - dist_to_zero

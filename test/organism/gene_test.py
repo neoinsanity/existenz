@@ -39,7 +39,23 @@ class GeneTest(unittest.TestCase):
         self.assertIsNone(int_gene.value)
         ontic_type.validate_object(int_gene)
 
-        int_gene.random_value()
+        # test random generation
+        int_gene.rand_min = 0
+        int_gene.rand_max = 1
+        for _ in range(0, 200):
+            int_gene.random_value()
+            self.assertIs(int_gene.value, int)
+            self.assertIn(int_gene.value, {0, 1})
+
+        # test mutation
+        int_gene.mutate()
+        int_gene.value = 0
+        int_gene.mutate()
+        self.assertEqual(1, int_gene.value)
+        for _ in range(0, 200):
+            next_val = abs(int_gene.value - 1)
+            int_gene.mutate()
+            self.assertEqual(next_val, int_gene.value)
 
     def test_normalize(self):
         int_gene = IntGene(rand_min=0, rand_max=9, value=2)
