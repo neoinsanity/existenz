@@ -1,37 +1,74 @@
 """A representation of the World."""
+import json
+import logging
 import random
+import uuid
 from sys import stdout
 
-from existenz.globe import Globe
+from ontic.ontic_type import OnticType
+from ontic.schema_type import PropertySchema, SchemaType
+
+from existenz.util_decorator import memoize
+
+ENTITY_TYPE = {'plant'}
+
+
+class Entity(OnticType):
+    ONTIC_SCHEMA = SchemaType(
+        id=PropertySchema(required=True, type=int),
+        type=PropertySchema(required=True, type=str, enum=ENTITY_TYPE),
+    )
+
+
+class Location(OnticType):
+    ONTIC_SCHEMA = SchemaType(
+        id=PropertySchema(required=True, type=int),
+        x=PropertySchema(required=True, type=int),
+        y=PropertySchema(required=True, type=int),
+        entities=PropertySchema(required=True, type=list, default=[])
+    )
+
+
+def attempt_planting(location):
+    if random.randint(0, 1):
+        entity = Entity(id=str(uuid.uuid4()), type='plant')
+        location.entities.append(entity)
+        return entity
+    else:
+        return None
 
 
 class World(object):
     """Representation of the world for denizens to live and die."""
 
-    def __init__(self, size=10):
+    PROCESS_MAP = {
+        'plant': process_plant
+    }
+
+    def __init__(self, log=logging.getLogger(), seed=0, size=15):
+        self.log = log
+        self._seed = seed
         self._size = size
         self._day = 0
+        self._total_locations = size * size
+        self._entities = list()
+        self._entity_location_map = dict()
 
-        # create the two globes for current and future world states
-        self._current_globe = Globe(self._size)
-        self._future_globe = Globe(self._size)
+        self._locations = self._generate_initial_locations()
 
         # seed the current world
-        random.seed(1)  # todo: raul - replace this will random configuration
-        for location in self.globe.locations:
-            location.plant = random.randint(0, 1)
+        for location in self.locations:
+            planted = attempt_planting(location)
+            if planted:
+                self._entities.append(planted)
+                self._entity_location_map[planted.id] = location
 
         self.dump_world()
 
     @property
-    def globe(self):
-        """A representation of the current state of the world."""
-        return self._current_globe
-
-    @property
-    def future_world(self):
-        """A representation of the future world being constructed."""
-        return self._future_globe
+    def locations(self):
+        """A list of the locations in a given globe."""
+        return self._locations
 
     @property
     def size(self):
@@ -47,48 +84,43 @@ class World(object):
         :param days: The number of days the world should life-cycle it denizens.
         :type days: int
         """
-        for cycle in range(0, days):
+        # todo(raul) add the code to iterate that gives each entity a turn
+        for iteration in range(0, days):
+            self._purculate_populations()
             self._day += 1
 
-            self.process_plants()
+        self.dump_world()
 
-            # rotate the globes after processing
-            temp_globe = self._current_globe
-            self._current_globe = self._future_globe
-            self._future_globe = temp_globe
+    def get_location(self, x_coord, y_coord):
+        """Retrieve a given location from given coordinates.
 
-            self.dump_world()
-
-    def process_plants(self):
-        """Method that will life-cycle plants in the world."""
-        for loc in self.globe.locations:
-            future_loc = self.future_world.get_location(loc.x, loc.y)
-            future_loc.plant = self.grow(loc)
-
-    def grow(self, location):
-        """Method to determine if a plant should grow in a given location.
-
-        :param location: A candidate location for plant life.
-        :type location: existenz.location.Location
-        :return: A 1 is returned if the location should have a plant, else a
-            0 is returned if no plant should exist on the given location.
-        :rtype: int
+        :param x_coord: The abscissa of the coordinate.
+        :type x_coord: int
+        :param y_coord: The ordinate of the coordinate.
+        :type y_coord: int
+        :return: The location for the given coordinates.
+        :rtype: existenz.location.Location
         """
-        neighbors = self.globe.get_neighbors(location.x, location.y)
-        life_count = 0
-        for neighbor in neighbors:
-            life_count = life_count + 1 if neighbor.plant else life_count
+        index = (x_coord * self._size) + y_coord
+        x_out_of_bound = x_coord < 0 or x_coord >= self._size
+        y_out_of_bound = y_coord < 0 or y_coord >= self._size
+        if index > self._total_locations or x_out_of_bound or y_out_of_bound:
+            raise IndexError('No coordinate (%s, %s)' % (x_coord, y_coord))
+        return self._locations[index]
 
-        if location.plant:
-            if life_count < 2 or life_count > 4:
-                return 0
-            else:
-                return 1
-        else:
-            if life_count == 3:
-                return 1
-            else:
-                return 0
+    @memoize
+    def get_neighbors(self, x_coord, y_coord):
+        """Retrieve the locations adjacent to the given coordinates.
+
+        :param x_coord: The abscissa of the coordinates.
+        :type x_coord: int
+        :param y_coord: The ordinate of the coordinates.
+        :type y_coord: int
+        :return: A list of neighbors locations.
+        :rtype: list(existenz.location.Location)
+        """
+        return list(self.locations[index] for index in
+                    self._neighbors(x_coord, y_coord))
 
     def dump_world(self):
         """Method that will dump the state of the current world to stdio."""
@@ -96,6 +128,61 @@ class World(object):
         for x_coord in range(0, self.size):
             for y_coord in range(0, self.size):
                 index = (self.size * x_coord) + y_coord
-                loc = self._current_globe.locations[index]
-                stdout.write(str(loc))
-            stdout.write('\n')
+                loc = self._locations[index]
+                self.log.debug(json.dumps(loc))
+
+    def _generate_initial_locations(self):
+
+        locations = []
+        for x_coord in range(0, self._size):
+            for y_coord in range(0, self._size):
+                location = Location(id=(self.size * x_coord) + y_coord,
+                                    x=x_coord,
+                                    y=y_coord,
+                                    entities=list())
+                locations.append(location)
+
+        return locations
+
+    def _neighbors(self, x_coord, y_coord):
+        """Calculates the neighbors to a given coordinate.
+
+        :param x_coord: The abscissa of the target coordinate.
+        :type x_coord: int
+        :param y_coord: The ordinate of the target coordinate.
+        :type y_coord: int
+        :return: list
+        """
+        indexes = list()
+        for x_inc in [-1, 0, 1]:
+            for y_inc in [-1, 0, 1]:
+                if x_inc == 0 and y_inc == 0:
+                    # Skip the central location.
+                    continue
+                x_ordinate = (x_coord + x_inc) % self.size
+                y_ordiante = (y_coord + y_inc) % self.size
+                index = (self.size * x_ordinate) + y_ordiante
+                indexes.append(index)
+        return indexes
+
+    def _purculate_populations(self):
+        entity_catch_list = list()
+
+        while self._entities:
+            entity = self._entities.pop(
+                random.randrange(len(self._entities)))
+            entity_catch_list.append(entity)
+            # do some processing of some sort.
+
+        self._entities = entity_catch_list
+
+
+    def _process_plant(self, location, entity):
+        self.log.debug('_process_plant((%s,%s), %s',
+                       location.x, location, y, entity)
+
+        neighbors = self.get_neighbors
+        plant_count = 0
+        for loc in neighbors:
+            if loc.has_type(entity.type):
+                plant_count += 1
