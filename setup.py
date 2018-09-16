@@ -15,7 +15,7 @@ setup(
     long_description=long_description,
     packages=['existenz', ],
     install_requires=[
-        'cognate==0.0.1',
+        'cognate==0.0.6',
         'decorator==3.4.0',
     ],
     include_package_data=True,
