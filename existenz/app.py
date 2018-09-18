@@ -39,7 +39,7 @@ class App(ComponentCore):
 
     def cognate_configure(self, args):
         # create the world
-        self.world = World(self.size)
+        self.world = World(log=self.log, size=self.size)
 
     def run(self):
         """Executes the configured world scenario."""

@@ -5,34 +5,17 @@ import random
 import uuid
 from sys import stdout
 
-from ontic.ontic_type import OnticType
-from ontic.schema_type import PropertySchema, SchemaType
+from ontic.ontic_type import perfect_object
 
+from existenz.entity import Entity
+from existenz.location import Location
 from existenz.util_decorator import memoize
-
-ENTITY_TYPE = {'plant'}
-
-
-class Entity(OnticType):
-    ONTIC_SCHEMA = SchemaType(
-        id=PropertySchema(required=True, type=int),
-        type=PropertySchema(required=True, type=str, enum=ENTITY_TYPE),
-    )
-
-
-class Location(OnticType):
-    ONTIC_SCHEMA = SchemaType(
-        id=PropertySchema(required=True, type=int),
-        x=PropertySchema(required=True, type=int),
-        y=PropertySchema(required=True, type=int),
-        entities=PropertySchema(required=True, type=list, default=[])
-    )
 
 
 def attempt_planting(location):
     if random.randint(0, 1):
         entity = Entity(id=str(uuid.uuid4()), type='plant')
-        location.entities.append(entity)
+        location.add_entity(entity)
         return entity
     else:
         return None
@@ -40,10 +23,6 @@ def attempt_planting(location):
 
 class World(object):
     """Representation of the world for denizens to live and die."""
-
-    PROCESS_MAP = {
-        'plant': process_plant
-    }
 
     def __init__(self, log=logging.getLogger(), seed=0, size=15):
         self.log = log
@@ -139,7 +118,9 @@ class World(object):
                 location = Location(id=(self.size * x_coord) + y_coord,
                                     x=x_coord,
                                     y=y_coord,
-                                    entities=list())
+                                    type_count=dict(),
+                                    entities=dict())
+                perfect_object(location)
                 locations.append(location)
 
         return locations
@@ -172,17 +153,6 @@ class World(object):
             entity = self._entities.pop(
                 random.randrange(len(self._entities)))
             entity_catch_list.append(entity)
-            # do some processing of some sort.
+            entity.life_cycle(self, self._entity_location_map[entity.id])
 
         self._entities = entity_catch_list
-
-
-    def _process_plant(self, location, entity):
-        self.log.debug('_process_plant((%s,%s), %s',
-                       location.x, location, y, entity)
-
-        neighbors = self.get_neighbors
-        plant_count = 0
-        for loc in neighbors:
-            if loc.has_type(entity.type):
-                plant_count += 1

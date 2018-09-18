@@ -11,3 +11,4 @@ class WorldTest(unittest.TestCase):
 
     def test_world(self):
         world = World()
+        world.rotate()
